@@ -155,115 +155,128 @@
       card.addEventListener('mouseleave', () => {
         card.style.zIndex = '';
       });
-    });
-    
-    // Optional: Add lightbox functionality
-    initLightbox();
-  }
-
-  function initLightbox() {
-    const galleryImages = document.querySelectorAll('.gCard');
-    const lightbox = document.createElement('div');
-    lightbox.className = 'lightbox';
-    lightbox.innerHTML = `
-      <div class="lightbox-backdrop"></div>
-      <div class="lightbox-content">
-        <button class="lightbox-close" aria-label="Close">×</button>
-        <img class="lightbox-image" src="" alt="">
-        <div class="lightbox-caption"></div>
-      </div>
-    `;
-    document.body.appendChild(lightbox);
-    
-    galleryImages.forEach(img => {
-      img.addEventListener('click', (e) => {
+      
+      // Click to open lightbox
+      card.addEventListener('click', (e) => {
         e.preventDefault();
-        const imgSrc = img.querySelector('img').src;
-        const imgAlt = img.querySelector('img').alt;
-        
-        lightbox.querySelector('.lightbox-image').src = imgSrc;
-        lightbox.querySelector('.lightbox-caption').textContent = imgAlt;
-        lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        const imgSrc = card.querySelector('img').src;
+        const imgAlt = card.querySelector('img').alt;
+        openLightbox(imgSrc, imgAlt);
       });
     });
+  }
+
+  function openLightbox(src, alt) {
+    // Check if lightbox already exists
+    let lightbox = document.querySelector('.lightbox');
     
-    lightbox.addEventListener('click', (e) => {
-      if (e.target.classList.contains('lightbox-backdrop') || 
-          e.target.classList.contains('lightbox-close')) {
-        lightbox.classList.remove('active');
-        document.body.style.overflow = '';
-      }
-    });
+    if (!lightbox) {
+      // Create lightbox
+      lightbox = document.createElement('div');
+      lightbox.className = 'lightbox';
+      lightbox.innerHTML = `
+        <div class="lightbox-backdrop"></div>
+        <div class="lightbox-content">
+          <button class="lightbox-close" aria-label="Close">×</button>
+          <img class="lightbox-image" src="" alt="">
+          <div class="lightbox-caption"></div>
+        </div>
+      `;
+      document.body.appendChild(lightbox);
+      
+      // Add lightbox styles
+      const lightboxStyles = document.createElement('style');
+      lightboxStyles.textContent = `
+        .lightbox {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          display: none;
+          align-items: center;
+          justify-content: center;
+          z-index: 9999;
+        }
+        .lightbox.active {
+          display: flex;
+        }
+        .lightbox-backdrop {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.9);
+          backdrop-filter: blur(10px);
+        }
+        .lightbox-content {
+          position: relative;
+          max-width: 90%;
+          max-height: 90%;
+          z-index: 1;
+        }
+        .lightbox-image {
+          width: 100%;
+          height: auto;
+          max-height: 80vh;
+          object-fit: contain;
+          border-radius: 12px;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .lightbox-close {
+          position: absolute;
+          top: -40px;
+          right: 0;
+          background: rgba(255,255,255,0.1);
+          border: 1px solid rgba(255,255,255,0.2);
+          color: white;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          font-size: 20px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+        }
+        .lightbox-close:hover {
+          background: rgba(255,255,255,0.2);
+          transform: scale(1.1);
+        }
+        .lightbox-caption {
+          color: white;
+          text-align: center;
+          margin-top: 16px;
+          font-size: 14px;
+          opacity: 0.8;
+        }
+      `;
+      document.head.appendChild(lightboxStyles);
+      
+      // Add close functionality
+      lightbox.addEventListener('click', (e) => {
+        if (e.target.classList.contains('lightbox-backdrop') || 
+            e.target.classList.contains('lightbox-close')) {
+          closeLightbox();
+        }
+      });
+    }
     
-    // Add lightbox styles
-    const lightboxStyles = document.createElement('style');
-    lightboxStyles.textContent = `
-      .lightbox {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-      }
-      .lightbox.active {
-        display: flex;
-      }
-      .lightbox-backdrop {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.9);
-        backdrop-filter: blur(10px);
-      }
-      .lightbox-content {
-        position: relative;
-        max-width: 90%;
-        max-height: 90%;
-        z-index: 1;
-      }
-      .lightbox-image {
-        width: 100%;
-        height: auto;
-        border-radius: 12px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      }
-      .lightbox-close {
-        position: absolute;
-        top: -40px;
-        right: 0;
-        background: rgba(255,255,255,0.1);
-        border: 1px solid rgba(255,255,255,0.2);
-        color: white;
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        font-size: 20px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s ease;
-      }
-      .lightbox-close:hover {
-        background: rgba(255,255,255,0.2);
-        transform: scale(1.1);
-      }
-      .lightbox-caption {
-        color: white;
-        text-align: center;
-        margin-top: 16px;
-        font-size: 14px;
-        opacity: 0.8;
-      }
-    `;
-    document.head.appendChild(lightboxStyles);
+    // Update lightbox content
+    lightbox.querySelector('.lightbox-image').src = src;
+    lightbox.querySelector('.lightbox-caption').textContent = alt;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    const lightbox = document.querySelector('.lightbox');
+    if (lightbox) {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
   }
 
   function initFAQ() {
@@ -301,11 +314,20 @@
   document.addEventListener('keydown', (e) => {
     // Close lightbox on Escape
     if (e.key === 'Escape') {
-      const lightbox = document.querySelector('.lightbox');
-      if (lightbox && lightbox.classList.contains('active')) {
-        lightbox.classList.remove('active');
-        document.body.style.overflow = '';
-      }
+      closeLightbox();
     }
+  });
+
+  // Add image loading error handling
+  document.addEventListener('DOMContentLoaded', () => {
+    const images = document.querySelectorAll('img');
+    
+    images.forEach(img => {
+      img.addEventListener('error', () => {
+        console.warn('Failed to load image:', img.src);
+        // You could add a fallback image here
+        // img.src = 'assets/images/fallback.webp';
+      });
+    });
   });
 })();
