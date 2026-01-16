@@ -3,384 +3,223 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Baklawa Bites — premium baklava bites in beautiful gift-ready trays." />
   <title>Baklawa Bites</title>
-
-  <!-- Enable progressive enhancements (reveal animations) without breaking content if JS fails. -->
-  <script>document.documentElement.classList.add('js');</script>
-
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="icon" href="assets/images/logo_mark.svg" type="image/svg+xml" />
+  <meta name="description" content="Baklawa that looks as good as it tastes — elegant trays of crisp, honeyed bites." />
+  <link rel="icon" href="assets/images/logo.svg" type="image/svg+xml" />
+  <link rel="preload" href="assets/images/hero.webp" as="image" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
+  <div class="bg-orbs" aria-hidden="true">
+    <span class="orb o1"></span>
+    <span class="orb o2"></span>
+    <span class="orb o3"></span>
+  </div>
 
-  <header>
-    <div class="wrap bar">
-      <a class="brand" href="#top" aria-label="Baklawa Bites">
-        <img src="assets/images/logo_mark.svg" alt="Baklawa Bites" />
-        <span>Baklawa Bites</span>
+  <header class="topbar" id="top">
+    <div class="container topbar__inner">
+      <a class="brand" href="#top" aria-label="Baklawa Bites Home">
+        <img src="assets/images/logo.svg" alt="BB" class="brand__mark" />
+        <span class="brand__name">Baklawa Bites</span>
       </a>
 
-      <nav class="nav">
-        <a href="#gallery">Gallery</a>
-        <a href="#shop">Shop</a>
-        <a href="#faq">FAQ</a>
+      <nav class="nav" aria-label="Primary">
+        <a class="nav__link" href="#gallery">Gallery</a>
+        <a class="nav__link" href="#shop">Shop</a>
+        <a class="nav__link" href="#faq">FAQ</a>
       </nav>
 
-      <div class="actions">
-        <a class="btn" href="#shop">Order</a>
+      <div class="topbar__cta">
+        <a class="btn btn--ghost" href="#shop">Order</a>
       </div>
     </div>
   </header>
 
-  <main id="top" class="wrap">
-
-    <!-- HERO -->
+  <main>
     <section class="hero">
-      <div class="heroGrid">
-        <div class="heroCopy">
-          <div class="pill">Handmade • Gift-ready • Premium</div>
-          <h1>Baklava that looks as good as it tastes.</h1>
-          <p class="muted">Elegant trays of perfectly crisp, honeyed baklava bites — made to impress at events, meetings, and celebrations.</p>
-
-          <div class="ctaRow">
+      <div class="container hero__grid">
+        <div class="hero__copy reveal">
+          <p class="eyebrow">Handmade • Gift-ready • Event-friendly</p>
+          <h1>Baklawa that looks as good as it tastes.</h1>
+          <p class="subhead">Elegant trays of perfectly crisp, honeyed baklawa bites — made to impress at events, meetings, and celebrations.</p>
+          <div class="hero__actions">
             <a class="btn" href="#shop">Shop packs</a>
-            <a class="btn ghost" href="#gallery">See photos</a>
+            <a class="btn btn--ghost" href="#gallery">See photos</a>
           </div>
 
-          <div class="heroStrip">
-            <div><strong>Fresh</strong><br><span class="muted">Made to order</span></div>
-            <div><strong>Gift-ready</strong><br><span class="muted">Elegant packaging</span></div>
-            <div><strong>Fast checkout</strong><br><span class="muted">Secure payment</span></div>
+          <div class="trust">
+            <div class="trust__item">
+              <span class="trust__title">Fresh</span>
+              <span class="trust__desc">Made to order</span>
+            </div>
+            <div class="trust__item">
+              <span class="trust__title">Gift-ready</span>
+              <span class="trust__desc">Elegant packaging</span>
+            </div>
+            <div class="trust__item">
+              <span class="trust__title">Fast checkout</span>
+              <span class="trust__desc">Secure payment</span>
+            </div>
           </div>
 
-          <p class="fine muted">Tax and shipping shown at checkout.</p>
+          <p class="fineprint">Tax and shipping shown at checkout.</p>
         </div>
 
-        <div class="heroMedia">
-          <img src="assets/images/hero.webp" alt="Baklawa Bites tray" />
-          <div class="glass">
-            <div class="glassTitle">Customer favorite</div>
-            <div class="glassRow">
-              <span class="badge">Pistachio</span>
-              <span class="badge">Walnut</span>
-              <span class="badge">Classic syrup</span>
+        <div class="hero__media reveal">
+          <div class="glass-card hero-card">
+            <div class="hero-badges">
+              <span class="pill">Customer favorite</span>
+              <span class="pill pill--soft">Pistachio</span>
+              <span class="pill pill--soft">Walnut</span>
+              <span class="pill pill--soft">Classic syrup</span>
             </div>
+            <img class="hero-img" src="assets/images/hero.webp" alt="Tray of baklawa bites" loading="eager" />
           </div>
         </div>
       </div>
     </section>
 
-    <!-- GALLERY -->
-    <section id="gallery" class="section section--alt">
-      <div class="sectionHead">
-        <div class="kicker">Gallery</div>
-        <h2>Real photos, real trays.</h2>
-        <p class="muted">A quick look at our packaging and the bite shapes (each one is a little unique).</p>
-      </div>
+    <section class="section" id="gallery">
+      <div class="container">
+        <div class="section__head reveal">
+          <div>
+            <p class="eyebrow">Gallery</p>
+            <h2>Golden, crisp, and camera-ready.</h2>
+          </div>
+          <p class="muted">A quick peek at recent trays & packaging.</p>
+        </div>
 
-      <div class="galleryGrid">
-        <a class="gCard" href="assets/images/gallery_1.webp" target="_blank" rel="noreferrer">
-          <img src="assets/images/gallery_1.webp" alt="Baklava tray photo 1" />
-          <div class="gOverlay">View</div>
-        </a>
-        <a class="gCard" href="assets/images/gallery_2.webp" target="_blank" rel="noreferrer">
-          <img src="assets/images/gallery_2.webp" alt="Baklava tray photo 2" />
-          <div class="gOverlay">View</div>
-        </a>
-        <a class="gCard" href="assets/images/gallery_3.webp" target="_blank" rel="noreferrer">
-          <img src="assets/images/gallery_3.webp" alt="Baklava tray photo 3" />
-          <div class="gOverlay">View</div>
-        </a>
-        <a class="gCard" href="assets/images/gallery_4.webp" target="_blank" rel="noreferrer">
-          <img src="assets/images/gallery_4.webp" alt="Baklava tray photo 4" />
-          <div class="gOverlay">View</div>
-        </a>
-        <a class="gCard" href="assets/images/gallery_5.webp" target="_blank" rel="noreferrer">
-          <img src="assets/images/gallery_5.webp" alt="Baklava tray photo 5" />
-          <div class="gOverlay">View</div>
-        </a>
-        <a class="gCard" href="assets/images/gallery_6.webp" target="_blank" rel="noreferrer">
-          <img src="assets/images/gallery_6.webp" alt="Baklava tray photo 6" />
-          <div class="gOverlay">View</div>
-        </a>
-        <a class="gCard" href="assets/images/gallery_7.webp" target="_blank" rel="noreferrer">
-          <img src="assets/images/gallery_7.webp" alt="Baklava tray photo 7" />
-          <div class="gOverlay">View</div>
-        </a>
-        <a class="gCard" href="assets/images/gallery_8.webp" target="_blank" rel="noreferrer">
-          <img src="assets/images/gallery_8.webp" alt="Baklava tray photo 8" />
-          <div class="gOverlay">View</div>
-        </a>
+        <div class="gallery">
+          <figure class="gcard reveal"><img src="assets/images/gallery/gallery_1.jpg" alt="Baklawa photo 1" loading="lazy"></figure>
+          <figure class="gcard reveal"><img src="assets/images/gallery/gallery_2.jpg" alt="Baklawa photo 2" loading="lazy"></figure>
+          <figure class="gcard reveal"><img src="assets/images/gallery/gallery_3.jpg" alt="Baklawa photo 3" loading="lazy"></figure>
+          <figure class="gcard reveal"><img src="assets/images/gallery/gallery_4.jpg" alt="Baklawa photo 4" loading="lazy"></figure>
+          <figure class="gcard reveal"><img src="assets/images/gallery/gallery_5.jpg" alt="Baklawa photo 5" loading="lazy"></figure>
+          <figure class="gcard reveal"><img src="assets/images/gallery/gallery_6.jpg" alt="Baklawa photo 6" loading="lazy"></figure>
+          <figure class="gcard reveal"><img src="assets/images/gallery/gallery_7.jpg" alt="Baklawa photo 7" loading="lazy"></figure>
+          <figure class="gcard reveal"><img src="assets/images/gallery/gallery_8.jpg" alt="Baklawa photo 8" loading="lazy"></figure>
+          <figure class="gcard reveal"><img src="assets/images/gallery/gallery_9.jpg" alt="Baklawa photo 9" loading="lazy"></figure>
+        </div>
       </div>
     </section>
 
-    <!-- SHOP -->
-      <section class="section" id="shop">
-        <div class="sectionHeader">
-          <div class="kicker">SHOP</div>
-          <h2>Choose a pack size, add to cart.</h2>
+    <section class="section" id="shop">
+      <div class="container">
+        <div class="section__head reveal">
+          <div>
+            <p class="eyebrow">Shop</p>
+            <h2>Choose a pack size, add to cart.</h2>
+          </div>
+          <p class="muted">Option B: Add to cart (cart button appears on the right).</p>
         </div>
 
-        <div class="grid shopGrid" id="productGrid">
-          <article class="card reveal packCard">
-            <div class="cardMedia packMedia">
-              <img class="packImg" src="assets/images/product_12.webp" alt="12 bites pack" loading="lazy" />
+        <div class="products">
+          <article class="product reveal">
+            <div class="product__media">
+              <img src="assets/images/products/12.webp" alt="12 bite pack" loading="lazy" />
             </div>
-            <div class="cardBody">
-              <h4 class="name">12 Bites</h4>
-              <p class="meta">Perfect for a gift, tasting, or small gathering.</p>
-              <div class="price">$12.99</div>
-              <div class="shopifyButtonWrap" id="product-component-1768512180287"></div>
-            </div>
-          </article>
-
-          <article class="card reveal packCard">
-            <div class="cardMedia packMedia">
-              <img class="packImg" src="assets/images/product_24.webp" alt="24 bites pack" loading="lazy" />
-            </div>
-            <div class="cardBody">
-              <h4 class="name">24 Bites</h4>
-              <p class="meta">A balanced tray for family nights, parties, and thoughtful gifting.</p>
-              <div class="price subtle">Price shown at checkout.</div>
-              <div class="shopifyButtonWrap" id="product-component-1768520022812"></div>
+            <div class="product__body">
+              <h3>12 Bites</h3>
+              <p>Perfect for a gift, tasting, or small gathering.</p>
+              <div class="product__meta">
+                <span class="price">$12.99</span>
+                <span class="note">Ships with care</span>
+              </div>
+              <div class="product__buy" id="buy-12"></div>
             </div>
           </article>
 
-          <article class="card reveal packCard">
-            <div class="cardMedia packMedia">
-              <img class="packImg" src="assets/images/product_48.webp" alt="48 bites tray" loading="lazy" />
+          <article class="product reveal">
+            <div class="product__media">
+              <img src="assets/images/products/48.webp" alt="48 bite tray" loading="lazy" />
             </div>
-            <div class="cardBody">
-              <h4 class="name">48 Bites</h4>
-              <p class="meta">Event-ready tray — our best for offices &amp; celebrations.</p>
-              <div class="price">$44.95</div>
-              <div class="shopifyButtonWrap" id="product-component-1768512486412"></div>
+            <div class="product__body">
+              <h3>48 Bites</h3>
+              <p>Event-ready tray — our best for offices & celebrations.</p>
+              <div class="product__meta">
+                <span class="price">$44.95</span>
+                <span class="note">Most popular</span>
+              </div>
+              <div class="product__buy" id="buy-48"></div>
+            </div>
+          </article>
+
+          <article class="product reveal">
+            <div class="product__media">
+              <img src="assets/images/products/24.webp" alt="24 bite pack" loading="lazy" />
+            </div>
+            <div class="product__body">
+              <h3>24 Bites</h3>
+              <p>Perfect middle ground — shareable and easy to serve.</p>
+              <div class="product__meta">
+                <span class="price">See price</span>
+                <span class="note">Great value</span>
+              </div>
+              <div class="product__buy" id="buy-24"></div>
             </div>
           </article>
         </div>
-      </section>
 
-<!-- FAQ -->
-    <section id="faq" class="section section--alt">
-      <div class="sectionHead">
-        <div class="kicker">FAQ</div>
-        <h2>Quick answers.</h2>
+        <div class="divider"></div>
+
+        <div class="mini-faq reveal">
+          <div>
+            <p class="eyebrow">Details</p>
+            <h3>Quick answers.</h3>
+          </div>
+          <div class="qa">
+            <details open>
+              <summary>How does shipping work?</summary>
+              <p>Shipping and taxes are calculated at checkout. We pack trays to stay crisp and presentable.</p>
+            </details>
+            <details>
+              <summary>Are the bites all identical?</summary>
+              <p>They’re handmade — each bite is slightly unique. That’s part of the charm (and the proof it’s real).</p>
+            </details>
+            <details>
+              <summary>Can I order for an event?</summary>
+              <p>Yes. If you need multiple trays, place your order and add a note in the cart — or reach out for timing.</p>
+            </details>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <div class="faq">
-        <details>
-          <summary>How does shipping work?</summary>
-          <p>Shipping is calculated at checkout. We’re starting local and expanding carefully to keep quality high.</p>
-        </details>
-        <details>
-          <summary>Are the bites all identical?</summary>
-          <p>They’re handmade — each bite is slightly unique. That’s part of the charm (and the proof it’s real).</p>
-        </details>
-        <details>
-          <summary>Can I order for an event?</summary>
-          <p>Yes. The 48‑bite tray is designed for events. For larger orders, contact us and we’ll coordinate.</p>
-        </details>
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section__head reveal">
+          <div>
+            <p class="eyebrow">FAQ</p>
+            <h2>Everything you need, nothing you don’t.</h2>
+          </div>
+          <p class="muted">Short, clear, and honest.</p>
+        </div>
+
+        <div class="faq-grid">
+          <div class="glass-card reveal">
+            <h3>What’s inside?</h3>
+            <p>Classic baklawa flavors with a crisp finish — made to be shareable and photo-friendly.</p>
+          </div>
+          <div class="glass-card reveal">
+            <h3>How fresh is it?</h3>
+            <p>Made to order. We aim for peak crispness and beautiful presentation.</p>
+          </div>
+          <div class="glass-card reveal">
+            <h3>Custom orders?</h3>
+            <p>For events, leave a note in the cart at checkout. We’ll follow up if anything needs clarification.</p>
+          </div>
+        </div>
       </div>
     </section>
 
     <footer class="footer">
-      <div class="fine muted">© <span id="y"></span> Baklawa Bites. All rights reserved.</div>
+      <div class="container footer__inner">
+        <p>© <span id="year"></span> Baklawa Bites. All rights reserved.</p>
+        <a href="#top" class="muted">Back to top ↑</a>
+      </div>
     </footer>
-
   </main>
 
-  <!-- Minimal site JS (animations + helpers) -->
-  <script src="js/app.js" defer></script>
-
-  <!-- Shopify Buy Button (12 + 24 + 48) -->
-  <script type="text/javascript">
-    /*<![CDATA[*/
-    (function () {
-      var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
-
-      function loadScript(callback) {
-        var script = document.createElement('script');
-        script.async = true;
-        script.src = scriptURL;
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
-        script.onload = callback;
-      }
-
-      function initShopifyBuy() {
-        var client = ShopifyBuy.buildClient({
-          domain: 'bm3rcp-p3.myshopify.com',
-          storefrontAccessToken: 'e6ed311285d5b71c3057ed317f544f2d',
-        });
-
-        ShopifyBuy.UI.onReady(client).then(function (ui) {
-          var commonOptions = {
-            product: {
-              styles: {
-                product: {
-                  'max-width': '100%',
-                  margin: '0',
-                  padding: '0',
-                  'text-align': 'center',
-                },
-                button: {
-                  'font-family': 'Roboto, sans-serif',
-                  'font-weight': 'bold',
-                  'font-size': '13px',
-                  'padding-top': '14.5px',
-                  'padding-bottom': '14.5px',
-                  ':hover': { 'background-color': '#b59223' },
-                  'background-color': '#c9a227',
-                  ':focus': { 'background-color': '#b59223' },
-                  'border-radius': '26px',
-                  'padding-left': '23px',
-                  'padding-right': '23px',
-                },
-                quantityInput: {
-                  'font-size': '13px',
-                  'padding-top': '14.5px',
-                  'padding-bottom': '14.5px',
-                },
-              },
-              // We render our own title/price/image in the card.
-              contents: {
-                img: false,
-                title: false,
-                price: false,
-              },
-              text: { button: 'Add to cart' },
-              googleFonts: ['Roboto'],
-            },
-            modalProduct: {
-              contents: {
-                img: false,
-                imgWithCarousel: true,
-                button: false,
-                buttonWithQuantity: true,
-              },
-              styles: {
-                product: {
-                  '@media (min-width: 601px)': {
-                    'max-width': '100%',
-                    'margin-left': '0px',
-                    'margin-bottom': '0px',
-                  },
-                },
-                button: {
-                  'font-family': 'Roboto, sans-serif',
-                  'font-weight': 'bold',
-                  'font-size': '13px',
-                  'padding-top': '14.5px',
-                  'padding-bottom': '14.5px',
-                  ':hover': { 'background-color': '#b59223' },
-                  'background-color': '#c9a227',
-                  ':focus': { 'background-color': '#b59223' },
-                  'border-radius': '26px',
-                  'padding-left': '23px',
-                  'padding-right': '23px',
-                },
-                quantityInput: {
-                  'font-size': '13px',
-                  'padding-top': '14.5px',
-                  'padding-bottom': '14.5px',
-                },
-              },
-              googleFonts: ['Roboto'],
-              text: { button: 'Add to cart' },
-            },
-            cart: {
-              styles: {
-                button: {
-                  'font-family': 'Roboto, sans-serif',
-                  'font-weight': 'bold',
-                  'font-size': '13px',
-                  'padding-top': '14.5px',
-                  'padding-bottom': '14.5px',
-                  ':hover': { 'background-color': '#b59223' },
-                  'background-color': '#c9a227',
-                  ':focus': { 'background-color': '#b59223' },
-                  'border-radius': '26px',
-                },
-                title: { color: '#000000' },
-                header: { color: '#000000' },
-                lineItems: { color: '#000000' },
-                subtotalText: { color: '#000000' },
-                subtotal: { color: '#000000' },
-                notice: { color: '#000000' },
-                currency: { color: '#000000' },
-                close: { color: '#000000', ':hover': { color: '#000000' } },
-                empty: { color: '#000000' },
-                noteDescription: { color: '#000000' },
-                discountText: { color: '#000000' },
-                discountIcon: { fill: '#000000' },
-                discountAmount: { color: '#000000' },
-              },
-              text: { total: 'Subtotal', button: 'Checkout' },
-              contents: { note: true },
-              popup: false,
-              googleFonts: ['Roboto'],
-            },
-            toggle: {
-              styles: {
-                toggle: {
-                  'font-family': 'Roboto, sans-serif',
-                  'font-weight': 'bold',
-                  'background-color': '#c9a227',
-                  ':hover': { 'background-color': '#b59223' },
-                  ':focus': { 'background-color': '#b59223' },
-                },
-                count: { 'font-size': '13px' },
-              },
-              googleFonts: ['Roboto'],
-            },
-            lineItem: {
-              styles: {
-                variantTitle: { color: '#000000' },
-                title: { color: '#000000' },
-                price: { color: '#000000' },
-                fullPrice: { color: '#000000' },
-                discount: { color: '#000000' },
-                discountIcon: { fill: '#000000' },
-                quantity: { color: '#000000' },
-                quantityIncrement: { color: '#000000', 'border-color': '#000000' },
-                quantityDecrement: { color: '#000000', 'border-color': '#000000' },
-                quantityInput: { color: '#000000', 'border-color': '#000000' },
-              },
-            },
-          };
-
-          function mount(productId, nodeId) {
-            var node = document.getElementById(nodeId);
-            if (!node) return;
-            // Clone options so each component is isolated.
-            var opts = JSON.parse(JSON.stringify(commonOptions));
-            ui.createComponent('product', {
-              id: productId,
-              node: node,
-              moneyFormat: '%24%7B%7Bamount%7D%7D',
-              options: opts,
-            });
-          }
-
-          mount('10224601497889', 'product-component-1768512180287'); // 12
-          mount('10224743612705', 'product-component-1768520022812'); // 24
-          mount('10224657858849', 'product-component-1768512486412'); // 48
-        });
-      }
-
-      if (window.ShopifyBuy) {
-        if (window.ShopifyBuy.UI) {
-          initShopifyBuy();
-        } else {
-          loadScript(initShopifyBuy);
-        }
-      } else {
-        loadScript(initShopifyBuy);
-      }
-    })();
-    /*]]>*/
-  </script>
-
-
+  <script src="assets/js/app.js" defer></script>
 </body>
 </html>

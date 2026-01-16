@@ -1,15 +1,11 @@
-# Baklawa Bites Website (GitHub-ready)
+# Baklawa Bites (static + Shopify Buy Button)
 
-This is a static website bundle (HTML/CSS/JS + assets) you can push directly to GitHub and deploy with GitHub Pages.
+This is a static site meant for GitHub Pages (or any static host) using Shopify's Buy Button SDK.
 
-## Files
-- `index.html`
-- `css/styles.css`
-- `js/app.js`
-- `assets/images/`
+## Deploy
+- Upload everything in this folder to your GitHub repo.
+- Enable GitHub Pages for the repo.
 
-## Run locally
-```bash
-python3 -m http.server 8080
-```
-Open http://localhost:8080
+## Notes
+- Image paths are **case-sensitive** on GitHub Pages.
+- Assets live under `/assets/...`.
