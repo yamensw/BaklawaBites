@@ -116,58 +116,52 @@
     </section>
 
     <!-- SHOP -->
-    <section id="shop" class="section">
-      <div class="shopHead">
-        <div class="kicker">Shop</div>
-        <p class="muted">Choose a pack size, add to cart.</p>
-      </div>
+      <section class="section" id="shop">
+        <div class="sectionHeader">
+          <div class="kicker">SHOP</div>
+          <h2>Choose a pack size, add to cart.</h2>
+        </div>
 
-      <div class="grid" id="productGrid">
-        <!-- 12 bites -->
-        <article class="card">
-          <div class="media">
-            <img src="assets/images/product_12.webp" alt="12 bites pack" />
-          </div>
-          <div class="content">
-            <h3>12 Bites</h3>
-            <p class="muted">Perfect for a gift, tasting, or small gathering.</p>
-
-            <div class="shopifyWrap">
-              <div id="product-component-1768512180287"></div>
+        <div class="grid shopGrid" id="productGrid">
+          <article class="card reveal packCard">
+            <div class="cardMedia packMedia">
+              <img class="packImg" src="assets/images/product_12.webp" alt="12 bites pack" loading="lazy" />
             </div>
-          </div>
-        </article>
-
-        <!-- 48 bites -->
-        <article class="card">
-          <div class="media">
-            <img src="assets/images/product_48.webp" alt="48 bites tray" />
-          </div>
-          <div class="content">
-            <h3>48 Bites</h3>
-            <p class="muted">Event-ready tray — our best for offices & celebrations.</p>
-
-            <div class="shopifyWrap">
-              <div id="product-component-1768512486412"></div>
+            <div class="cardBody">
+              <h4 class="name">12 Bites</h4>
+              <p class="meta">Perfect for a gift, tasting, or small gathering.</p>
+              <div class="price">$12.99</div>
+              <div class="shopifyButtonWrap" id="product-component-1768512180287"></div>
             </div>
-          </div>
-        </article>
+          </article>
 
-        <!-- Coming soon -->
-        <article class="card">
-          <div class="media">
-            <img src="assets/images/product_24.webp" alt="24 bites pack" />
-          </div>
-          <div class="content">
-            <h3>24 Bites</h3>
-            <p class="muted">Coming soon — we’re dialing in the packaging and shipping.</p>
-            <div class="pill" style="display:inline-flex; margin-top:10px;">Coming soon</div>
-          </div>
-        </article>
-      </div>
-    </section>
+          <article class="card reveal packCard">
+            <div class="cardMedia packMedia">
+              <img class="packImg" src="assets/images/product_24.webp" alt="24 bites pack" loading="lazy" />
+            </div>
+            <div class="cardBody">
+              <h4 class="name">24 Bites</h4>
+              <p class="meta">A balanced tray for family nights, parties, and thoughtful gifting.</p>
+              <div class="price subtle">Price shown at checkout.</div>
+              <div class="shopifyButtonWrap" id="product-component-1768520022812"></div>
+            </div>
+          </article>
 
-    <!-- FAQ -->
+          <article class="card reveal packCard">
+            <div class="cardMedia packMedia">
+              <img class="packImg" src="assets/images/product_48.webp" alt="48 bites tray" loading="lazy" />
+            </div>
+            <div class="cardBody">
+              <h4 class="name">48 Bites</h4>
+              <p class="meta">Event-ready tray — our best for offices &amp; celebrations.</p>
+              <div class="price">$44.95</div>
+              <div class="shopifyButtonWrap" id="product-component-1768512486412"></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+<!-- FAQ -->
     <section id="faq" class="section section--alt">
       <div class="sectionHead">
         <div class="kicker">FAQ</div>
@@ -199,162 +193,194 @@
   <!-- Minimal site JS (animations + helpers) -->
   <script src="js/app.js" defer></script>
 
-  <!-- Shopify Buy Button (12 + 48) -->
+  <!-- Shopify Buy Button (12 + 24 + 48) -->
   <script type="text/javascript">
-  /*<![CDATA[*/
-  (function () {
-    var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+    /*<![CDATA[*/
+    (function () {
+      var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
 
-    function loadScript() {
-      var script = document.createElement('script');
-      script.async = true;
-      script.src = scriptURL;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
-      script.onload = ShopifyBuyInit;
-    }
-
-    function ShopifyBuyInit() {
-      var client = ShopifyBuy.buildClient({
-        domain: 'bm3rcp-p3.myshopify.com',
-        storefrontAccessToken: 'e6ed311285d5b71c3057ed317f544f2d',
-      });
-
-      ShopifyBuy.UI.onReady(client).then(function (ui) {
-        // Shared visual theme (matches site)
-        var themedOptions = {
-          product: {
-            styles: {
-              product: {
-                'max-width': '100%',
-                'margin': '0',
-              },
-              button: {
-                'font-family': 'Roboto, sans-serif',
-                'font-weight': 'bold',
-                'font-size': '13px',
-                'padding-top': '14.5px',
-                'padding-bottom': '14.5px',
-                'background-color': '#c9a227',
-                ':hover': { 'background-color': '#b59223' },
-                ':focus': { 'background-color': '#b59223' },
-                'border-radius': '26px',
-                'padding-left': '23px',
-                'padding-right': '23px'
-              },
-              quantityInput: {
-                'font-size': '13px',
-                'padding-top': '14.5px',
-                'padding-bottom': '14.5px'
-              }
-            },
-            // Let Shopify show price + button. Title is already on our card.
-            contents: {
-              img: false,
-              title: false,
-              options: false,
-              price: true,
-              button: true,
-              quantity: false
-            },
-            text: {
-              button: 'Add to cart'
-            },
-            googleFonts: ['Roboto']
-          },
-          cart: {
-            styles: {
-              button: {
-                'font-family': 'Roboto, sans-serif',
-                'font-weight': 'bold',
-                'font-size': '13px',
-                'background-color': '#c9a227',
-                ':hover': { 'background-color': '#b59223' },
-                ':focus': { 'background-color': '#b59223' },
-                'border-radius': '26px'
-              },
-              title: { color: '#000000' },
-              header: { color: '#000000' },
-              lineItems: { color: '#000000' },
-              subtotalText: { color: '#000000' },
-              subtotal: { color: '#000000' },
-              notice: { color: '#000000' },
-              currency: { color: '#000000' },
-              close: { color: '#000000', ':hover': { color: '#000000' } },
-              empty: { color: '#000000' },
-              noteDescription: { color: '#000000' },
-              discountText: { color: '#000000' },
-              discountIcon: { fill: '#000000' },
-              discountAmount: { color: '#000000' }
-            },
-            text: {
-              total: 'Subtotal',
-              button: 'Checkout'
-            },
-            contents: {
-              note: true
-            },
-            popup: false,
-            googleFonts: ['Roboto']
-          },
-          toggle: {
-            styles: {
-              toggle: {
-                'font-family': 'Roboto, sans-serif',
-                'font-weight': 'bold',
-                'background-color': '#c9a227',
-                ':hover': { 'background-color': '#b59223' },
-                ':focus': { 'background-color': '#b59223' }
-              },
-              count: { 'font-size': '13px' }
-            },
-            googleFonts: ['Roboto']
-          },
-          lineItem: {
-            styles: {
-              variantTitle: { color: '#000000' },
-              title: { color: '#000000' },
-              price: { color: '#000000' },
-              fullPrice: { color: '#000000' },
-              discount: { color: '#000000' },
-              discountIcon: { fill: '#000000' },
-              quantity: { color: '#000000' },
-              quantityIncrement: { color: '#000000', 'border-color': '#000000' },
-              quantityDecrement: { color: '#000000', 'border-color': '#000000' },
-              quantityInput: { color: '#000000', 'border-color': '#000000' }
-            }
-          }
-        };
-
-        // 12 bites
-        ui.createComponent('product', {
-          id: '10224601497889',
-          node: document.getElementById('product-component-1768512180287'),
-          moneyFormat: '%24%7B%7Bamount%7D%7D',
-          options: themedOptions
-        });
-
-        // 48 bites
-        ui.createComponent('product', {
-          id: '10224657858849',
-          node: document.getElementById('product-component-1768512486412'),
-          moneyFormat: '%24%7B%7Bamount%7D%7D',
-          options: themedOptions
-        });
-      });
-    }
-
-    if (window.ShopifyBuy) {
-      if (window.ShopifyBuy.UI) {
-        ShopifyBuyInit();
-      } else {
-        loadScript();
+      function loadScript(callback) {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = scriptURL;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+        script.onload = callback;
       }
-    } else {
-      loadScript();
-    }
-  })();
-  /*]]>*/
+
+      function initShopifyBuy() {
+        var client = ShopifyBuy.buildClient({
+          domain: 'bm3rcp-p3.myshopify.com',
+          storefrontAccessToken: 'e6ed311285d5b71c3057ed317f544f2d',
+        });
+
+        ShopifyBuy.UI.onReady(client).then(function (ui) {
+          var commonOptions = {
+            product: {
+              styles: {
+                product: {
+                  'max-width': '100%',
+                  margin: '0',
+                  padding: '0',
+                  'text-align': 'center',
+                },
+                button: {
+                  'font-family': 'Roboto, sans-serif',
+                  'font-weight': 'bold',
+                  'font-size': '13px',
+                  'padding-top': '14.5px',
+                  'padding-bottom': '14.5px',
+                  ':hover': { 'background-color': '#b59223' },
+                  'background-color': '#c9a227',
+                  ':focus': { 'background-color': '#b59223' },
+                  'border-radius': '26px',
+                  'padding-left': '23px',
+                  'padding-right': '23px',
+                },
+                quantityInput: {
+                  'font-size': '13px',
+                  'padding-top': '14.5px',
+                  'padding-bottom': '14.5px',
+                },
+              },
+              // We render our own title/price/image in the card.
+              contents: {
+                img: false,
+                title: false,
+                price: false,
+              },
+              text: { button: 'Add to cart' },
+              googleFonts: ['Roboto'],
+            },
+            modalProduct: {
+              contents: {
+                img: false,
+                imgWithCarousel: true,
+                button: false,
+                buttonWithQuantity: true,
+              },
+              styles: {
+                product: {
+                  '@media (min-width: 601px)': {
+                    'max-width': '100%',
+                    'margin-left': '0px',
+                    'margin-bottom': '0px',
+                  },
+                },
+                button: {
+                  'font-family': 'Roboto, sans-serif',
+                  'font-weight': 'bold',
+                  'font-size': '13px',
+                  'padding-top': '14.5px',
+                  'padding-bottom': '14.5px',
+                  ':hover': { 'background-color': '#b59223' },
+                  'background-color': '#c9a227',
+                  ':focus': { 'background-color': '#b59223' },
+                  'border-radius': '26px',
+                  'padding-left': '23px',
+                  'padding-right': '23px',
+                },
+                quantityInput: {
+                  'font-size': '13px',
+                  'padding-top': '14.5px',
+                  'padding-bottom': '14.5px',
+                },
+              },
+              googleFonts: ['Roboto'],
+              text: { button: 'Add to cart' },
+            },
+            cart: {
+              styles: {
+                button: {
+                  'font-family': 'Roboto, sans-serif',
+                  'font-weight': 'bold',
+                  'font-size': '13px',
+                  'padding-top': '14.5px',
+                  'padding-bottom': '14.5px',
+                  ':hover': { 'background-color': '#b59223' },
+                  'background-color': '#c9a227',
+                  ':focus': { 'background-color': '#b59223' },
+                  'border-radius': '26px',
+                },
+                title: { color: '#000000' },
+                header: { color: '#000000' },
+                lineItems: { color: '#000000' },
+                subtotalText: { color: '#000000' },
+                subtotal: { color: '#000000' },
+                notice: { color: '#000000' },
+                currency: { color: '#000000' },
+                close: { color: '#000000', ':hover': { color: '#000000' } },
+                empty: { color: '#000000' },
+                noteDescription: { color: '#000000' },
+                discountText: { color: '#000000' },
+                discountIcon: { fill: '#000000' },
+                discountAmount: { color: '#000000' },
+              },
+              text: { total: 'Subtotal', button: 'Checkout' },
+              contents: { note: true },
+              popup: false,
+              googleFonts: ['Roboto'],
+            },
+            toggle: {
+              styles: {
+                toggle: {
+                  'font-family': 'Roboto, sans-serif',
+                  'font-weight': 'bold',
+                  'background-color': '#c9a227',
+                  ':hover': { 'background-color': '#b59223' },
+                  ':focus': { 'background-color': '#b59223' },
+                },
+                count: { 'font-size': '13px' },
+              },
+              googleFonts: ['Roboto'],
+            },
+            lineItem: {
+              styles: {
+                variantTitle: { color: '#000000' },
+                title: { color: '#000000' },
+                price: { color: '#000000' },
+                fullPrice: { color: '#000000' },
+                discount: { color: '#000000' },
+                discountIcon: { fill: '#000000' },
+                quantity: { color: '#000000' },
+                quantityIncrement: { color: '#000000', 'border-color': '#000000' },
+                quantityDecrement: { color: '#000000', 'border-color': '#000000' },
+                quantityInput: { color: '#000000', 'border-color': '#000000' },
+              },
+            },
+          };
+
+          function mount(productId, nodeId) {
+            var node = document.getElementById(nodeId);
+            if (!node) return;
+            // Clone options so each component is isolated.
+            var opts = JSON.parse(JSON.stringify(commonOptions));
+            ui.createComponent('product', {
+              id: productId,
+              node: node,
+              moneyFormat: '%24%7B%7Bamount%7D%7D',
+              options: opts,
+            });
+          }
+
+          mount('10224601497889', 'product-component-1768512180287'); // 12
+          mount('10224743612705', 'product-component-1768520022812'); // 24
+          mount('10224657858849', 'product-component-1768512486412'); // 48
+        });
+      }
+
+      if (window.ShopifyBuy) {
+        if (window.ShopifyBuy.UI) {
+          initShopifyBuy();
+        } else {
+          loadScript(initShopifyBuy);
+        }
+      } else {
+        loadScript(initShopifyBuy);
+      }
+    })();
+    /*]]>*/
   </script>
+
 
 </body>
 </html>
