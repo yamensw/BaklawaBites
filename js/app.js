@@ -1,351 +1,311 @@
-(() => {
-  // Update current year
-  const year = document.getElementById('year');
-  if (year) year.textContent = new Date().getFullYear();
+/* Baklawa Bites — Valentine Special */
 
-  // ===== ENHANCED REVEAL ANIMATIONS =====
-  const revealElements = Array.from(document.querySelectorAll('.reveal'));
-  const staggerContainers = Array.from(document.querySelectorAll('.stagger-children'));
+function initYear(){
+  const el = document.getElementById('year');
+  if (el) el.textContent = new Date().getFullYear().toString();
+}
+
+function initReveal(){
+  // Add js class to html for CSS targeting
+  document.documentElement.classList.add('js');
   
-  const observerOptions = {
-    threshold: 0.12,
-    rootMargin: '0px 0px -50px 0px'
-  };
-  
-  const revealObserver = new IntersectionObserver((entries) => {
+  const items = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)){
+    items.forEach(el => el.classList.add('is-visible'));
+    return;
+  }
+  const obs = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        revealObserver.unobserve(entry.target);
-        
-        // Trigger staggered children animations
-        if (entry.target.classList.contains('stagger-children')) {
-          const children = entry.target.children;
-          Array.from(children).forEach((child, index) => {
-            child.style.animationDelay = `${index * 0.1}s`;
-          });
-        }
+      if (entry.isIntersecting){
+        entry.target.classList.add('is-visible');
+        obs.unobserve(entry.target);
       }
     });
-  }, observerOptions);
+  }, { threshold: 0.12 });
 
-  revealElements.forEach(el => revealObserver.observe(el));
+  items.forEach(el => obs.observe(el));
+}
 
-  // ===== HOVER EFFECTS FOR INTERACTIVE ELEMENTS =====
-  const interactiveCards = document.querySelectorAll('.glass-card, .product, .gcard');
-  
-  interactiveCards.forEach(card => {
-    card.addEventListener('mouseenter', () => {
-      card.style.zIndex = '10';
-    });
-    
-    card.addEventListener('mouseleave', () => {
-      card.style.zIndex = '';
+function initLightbox(){
+  const lb = document.getElementById('lightbox');
+  if (!lb) return;
+  const imgEl = lb.querySelector('.lightbox__img');
+  const closeBtn = lb.querySelector('.lightbox__close');
+
+  function close(){
+    lb.classList.remove('open');
+    lb.setAttribute('aria-hidden', 'true');
+    imgEl.removeAttribute('src');
+    imgEl.setAttribute('alt', '');
+  }
+
+  document.querySelectorAll('.gcard img').forEach(img => {
+    img.addEventListener('click', () => {
+      lb.classList.add('open');
+      lb.setAttribute('aria-hidden', 'false');
+      imgEl.src = img.src;
+      imgEl.alt = img.alt || 'Baklawa photo';
     });
   });
 
-  // ===== PARALLAX EFFECT FOR BACKGROUND ORBS =====
-  function initParallax() {
-    const orbs = document.querySelectorAll('.orb');
-    const strength = 0.2;
-    
-    window.addEventListener('mousemove', (e) => {
-      const mouseX = e.clientX / window.innerWidth;
-      const mouseY = e.clientY / window.innerHeight;
-      
-      orbs.forEach((orb, index) => {
-        const speed = (index + 1) * 0.5;
-        const x = (mouseX - 0.5) * speed * 100;
-        const y = (mouseY - 0.5) * speed * 100;
-        
-        orb.style.transform = `translate(${x}px, ${y}px)`;
-      });
-    });
+  closeBtn?.addEventListener('click', close);
+  lb.addEventListener('click', (e) => {
+    if (e.target === lb) close();
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
+  });
+}
+
+function initHearts(){
+  const container = document.querySelector('.hearts');
+  if (!container) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const colors = ['#FF4D8D', '#FF86B6', '#D9B35E', '#F7B7D2'];
+  const total = 26; // initial burst
+  const burstMs = 1800;
+
+  const start = performance.now();
+
+  function spawn(){
+    const el = document.createElement('span');
+    el.className = 'heart';
+
+    const x = Math.random() * 100; // vw
+    const drift = (Math.random() * 18 - 9).toFixed(2) + 'vw';
+    const s = (Math.random() * 0.9 + 0.55).toFixed(2);
+    const rot = (Math.random() * 220 - 110).toFixed(0) + 'deg';
+    const dur = (Math.random() * 2.4 + 3.6).toFixed(2) + 's';
+    const delay = (Math.random() * 0.6).toFixed(2) + 's';
+
+    el.style.setProperty('--x', x.toFixed(2) + 'vw');
+    el.style.setProperty('--drift', drift);
+    el.style.setProperty('--s', s);
+    el.style.setProperty('--rot', rot);
+    el.style.setProperty('--dur', dur);
+    el.style.setProperty('--delay', delay);
+
+    el.style.left = '0';
+    el.style.color = colors[Math.floor(Math.random() * colors.length)];
+    el.style.fontSize = (Math.random() * 18 + 14).toFixed(0) + 'px';
+
+    el.addEventListener('animationend', () => el.remove());
+    container.appendChild(el);
   }
 
-  // ===== ANIMATED COUNTERS =====
-  function initCounters() {
-    const counters = document.querySelectorAll('.counter');
-    
-    counters.forEach(counter => {
-      const target = parseInt(counter.getAttribute('data-target')) || 100;
-      const duration = parseInt(counter.getAttribute('data-duration')) || 2000;
-      const increment = target / (duration / 16); // 60fps
-      let current = 0;
-      
-      const updateCounter = () => {
-        current += increment;
-        if (current < target) {
-          counter.textContent = Math.floor(current).toLocaleString();
-          requestAnimationFrame(updateCounter);
-        } else {
-          counter.textContent = target.toLocaleString();
-        }
-      };
-      
-      const counterObserver = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          updateCounter();
-          counterObserver.unobserve(counter);
-        }
-      }, { threshold: 0.5 });
-      
-      counterObserver.observe(counter);
-    });
-  }
-
-  // ===== TEXT REVEAL ANIMATION =====
-  function initTextReveal() {
-    const textRevealElements = document.querySelectorAll('.text-reveal');
-    
-    textRevealElements.forEach(element => {
-      const text = element.textContent;
-      element.innerHTML = text.split('').map(char => 
-        `<span style="animation-delay: ${Math.random() * 0.5}s">${char}</span>`
-      ).join('');
-      
-      const spans = element.querySelectorAll('span');
-      spans.forEach(span => {
-        span.style.opacity = '0';
-        span.style.animation = 'fadeInUp 0.5s ease forwards';
-      });
-    });
-  }
-
-  // ===== CURSOR EFFECT =====
-  function initCursorEffect() {
-    const cursor = document.createElement('div');
-    cursor.classList.add('custom-cursor');
-    document.body.appendChild(cursor);
-    
-    // Add CSS for cursor
-    const style = document.createElement('style');
-    style.textContent = `
-      .custom-cursor {
-        position: fixed;
-        width: 20px;
-        height: 20px;
-        border: 2px solid var(--gold);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 9999;
-        transform: translate(-50%, -50%);
-        transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease;
-        mix-blend-mode: difference;
-      }
-      .custom-cursor.hovering {
-        width: 40px;
-        height: 40px;
-        background: rgba(201, 162, 39, 0.2);
-      }
-    `;
-    document.head.appendChild(style);
-    
-    document.addEventListener('mousemove', (e) => {
-      cursor.style.left = `${e.clientX}px`;
-      cursor.style.top = `${e.clientY}px`;
-    });
-    
-    // Add hover effect
-    const hoverElements = document.querySelectorAll('a, button, .glass-card, .product');
-    hoverElements.forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursor.classList.add('hovering');
-      });
-      el.addEventListener('mouseleave', () => {
-        cursor.classList.remove('hovering');
-      });
-    });
-  }
-
-  // ===== SCROLL PROGRESS INDICATOR =====
-  function initScrollProgress() {
-    const progressBar = document.createElement('div');
-    progressBar.classList.add('scroll-progress');
-    document.body.appendChild(progressBar);
-    
-    const style = document.createElement('style');
-    style.textContent = `
-      .scroll-progress {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 3px;
-        background: linear-gradient(90deg, var(--gold), var(--gold2));
-        z-index: 1000;
-        width: 0%;
-        transition: width 0.1s ease;
-      }
-    `;
-    document.head.appendChild(style);
-    
-    window.addEventListener('scroll', () => {
-      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      progressBar.style.width = `${scrolled}%`;
-    });
-  }
-
-  // ===== LAZY LOAD IMAGES WITH FADE IN =====
-  function initLazyLoad() {
-    const lazyImages = document.querySelectorAll('img[data-src]');
-    
-    const imageObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const img = entry.target;
-          img.src = img.dataset.src;
-          img.classList.add('fade-in');
-          imageObserver.unobserve(img);
-        }
-      });
-    });
-    
-    lazyImages.forEach(img => imageObserver.observe(img));
-  }
-
-  // ===== INITIALIZE ALL ANIMATIONS =====
-  function initAnimations() {
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      initParallax();
-      initCursorEffect();
-      initScrollProgress();
-      initTextReveal();
-      initCounters();
-      initLazyLoad();
+  // spread spawns over a short burst window
+  let spawned = 0;
+  function tick(now){
+    const t = now - start;
+    const target = Math.floor((t / burstMs) * total);
+    while (spawned < Math.min(target, total)){
+      spawn();
+      spawned++;
     }
+    if (spawned < total) requestAnimationFrame(tick);
   }
+  requestAnimationFrame(tick);
+}
 
-  // Wait for DOM to be fully loaded
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAnimations);
-  } else {
-    initAnimations();
+/* Gentle tilt/parallax on the hero card (adds depth without affecting layout) */
+function initTilt(){
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const el = document.querySelector('.hero-card');
+  if (!el) return;
+
+  let rect = null;
+  const max = 7; // degrees
+
+  const onEnter = () => {
+    rect = el.getBoundingClientRect();
+    el.classList.add('tilting');
+  };
+
+  const onMove = (e) => {
+    if (!rect) rect = el.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;  // 0..1
+    const y = (e.clientY - rect.top) / rect.height;  // 0..1
+    const rotY = (x - 0.5) * max * 2;
+    const rotX = -(y - 0.5) * max * 2;
+    el.style.transform = `rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
+  };
+
+  const onLeave = () => {
+    el.style.transform = '';
+    el.classList.remove('tilting');
+    rect = null;
+  };
+
+  el.addEventListener('mouseenter', onEnter);
+  el.addEventListener('mousemove', onMove);
+  el.addEventListener('mouseleave', onLeave);
+}
+
+/* Create continuous background overlay */
+function initContinuousBackground() {
+  const overlay = document.createElement('div');
+  overlay.className = 'background-overlay';
+  document.body.appendChild(overlay);
+}
+
+/* Shopify Buy Button (shared cart) */
+function loadShopifyBuy(cb){
+  if (window.ShopifyBuy && window.ShopifyBuy.UI){
+    cb();
+    return;
   }
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+  script.onload = cb;
+  document.head.appendChild(script);
+}
 
-  // ===== SHOPIFY BUY BUTTON (UNCHANGED) =====
-  const scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+function initShopify(){
+  // Storefront details (from your Shopify Buy Button embed)
+  const domain = 'bm3rcp-p3.myshopify.com';
+  const token = 'e6ed311285d5b71c3057ed317f544f2d';
 
-  function loadShopify(cb){
-    if (window.ShopifyBuy && window.ShopifyBuy.UI) return cb();
-    const s = document.createElement('script');
-    s.async = true;
-    s.src = scriptURL;
-    s.onload = cb;
-    document.head.appendChild(s);
-  }
+  const productIds = {
+    // Valentine pre-order (hero button)
+    'buy-vday': 10230161146145,
+    'buy-12': 10224601497889,
+    'buy-24': 10224743612705,
+    'buy-48': 10224657858849,
+  };
 
-  function initShopify(){
-    const client = window.ShopifyBuy.buildClient({
-      domain: 'bm3rcp-p3.myshopify.com',
-      storefrontAccessToken: 'e6ed311285d5b71c3057ed317f544f2d',
-    });
+  if (!window.ShopifyBuy) return;
 
-    window.ShopifyBuy.UI.onReady(client).then((ui) => {
-      // Shared cart component
-      ui.createComponent('cart', {
-        options: {
-          cart: {
-            popup: false,
-            styles: {
-              button: {
-                'font-family': 'Roboto, sans-serif',
-                'font-weight': 'bold',
-                'background-color': '#c9a227',
-                ':hover': {'background-color': '#b59223'},
-                ':focus': {'background-color': '#b59223'},
-                'border-radius': '26px'
-              }
-            },
-            text: { total: 'Subtotal', button: 'Checkout' },
-            contents: { note: true }
-          },
-          toggle: {
-            styles: {
-              toggle: {
-                'font-family': 'Roboto, sans-serif',
-                'font-weight': 'bold',
-                'background-color': '#c9a227',
-                ':hover': {'background-color': '#b59223'},
-                ':focus': {'background-color': '#b59223'}
-              },
-              count: { 'font-size': '13px' }
-            }
-          },
-          lineItem: {
-            styles: {
-              title: { color: '#000000' },
-              variantTitle: { color: '#000000' },
-              price: { color: '#000000' },
-              quantityInput: { color: '#000000', 'border-color': '#000000' },
-              quantityIncrement: { color: '#000000', 'border-color': '#000000' },
-              quantityDecrement: { color: '#000000', 'border-color': '#000000' }
-            }
-          }
-        }
-      });
+  const client = window.ShopifyBuy.buildClient({
+    domain,
+    storefrontAccessToken: token,
+  });
 
-      const baseOptions = {
-        product: {
-          googleFonts: ['Roboto'],
-          buttonDestination: 'cart',
-          contents: {
-            img: false,
-            title: false,
-            price: false,
-            options: false
-          },
-          text: { button: 'Add to cart' },
-          styles: {
-            button: {
-              'font-family': 'Roboto, sans-serif',
-              'font-weight': 'bold',
-              'font-size': '13px',
-              'padding-top': '14.5px',
-              'padding-bottom': '14.5px',
-              'background-color': '#c9a227',
-              ':hover': {'background-color': '#b59223'},
-              ':focus': {'background-color': '#b59223'},
-              'border-radius': '26px',
-              'padding-left': '23px',
-              'padding-right': '23px'
-            }
-          }
+  window.ShopifyBuy.UI.onReady(client).then((ui) => {
+    const commonOptions = {
+      product: {
+        iframe: true,
+        contents: {
+          img: false,
+          title: false,
+          price: false,
+          options: false,
+          quantity: false,
+          button: true,
+          buttonWithQuantity: false,
+          description: false,
         },
-        modalProduct: {
-          contents: { img: false, imgWithCarousel: true, button: false, buttonWithQuantity: true },
-          googleFonts: ['Roboto'],
+        text: {
+          button: 'Add to cart',
+        },
+        styles: {
+          button: {
+            'background-color': 'rgba(255,255,255,0.18)',
+            'border': '1px solid rgba(255,255,255,0.35)',
+            'border-radius': '14px',
+            'font-weight': '700',
+            'padding': '12px 16px',
+            'backdrop-filter': 'blur(14px)',
+            'color': 'rgba(42,30,18,0.92)',
+            ':hover': {
+              'background-color': 'rgba(255,77,141,0.18)',
+              'border': '1px solid rgba(255,77,141,0.28)',
+            },
+            ':focus': {
+              'outline': 'none',
+              'box-shadow': '0 0 0 4px rgba(255,77,141,0.20)',
+            },
+          },
+        },
+      },
+      cart: {
+        startOpen: false,
+        popup: false,
+        text: {
+          title: 'Your cart',
+          total: 'Subtotal',
+          button: 'Checkout',
+          empty: 'Your cart is empty.',
+          notice: 'Shipping & taxes calculated at checkout.',
+        },
+        styles: {
+          button: {
+            'background-color': 'rgba(255,77,141,0.18)',
+            'border': '1px solid rgba(255,77,141,0.28)',
+            'border-radius': '14px',
+            'font-weight': '700',
+          },
+          header: { 'background-color': 'rgba(255,255,255,0.12)' },
+          footer: { 'background-color': 'rgba(255,255,255,0.12)' },
+        },
+      },
+      toggle: {
+        styles: {
+          toggle: {
+            'background-color': 'rgba(255,77,141,0.18)',
+            'border': '1px solid rgba(255,77,141,0.28)',
+            'border-radius': '14px',
+            'backdrop-filter': 'blur(14px)',
+            ':hover': { 'background-color': 'rgba(255,77,141,0.26)' },
+          },
+        },
+      },
+    };
+
+    // Hero pre-order button (overlay on the hero image)
+    const vdayNode = document.getElementById('buy-vday');
+    if (vdayNode) {
+      const vdayOptions = {
+        ...commonOptions,
+        product: {
+          ...commonOptions.product,
+          text: { button: 'Pre-Order' },
           styles: {
+            ...commonOptions.product.styles,
+            product: { 'text-align': 'center', 'margin': '0', 'max-width': '100%' },
             button: {
-              'font-family': 'Roboto, sans-serif',
-              'font-weight': 'bold',
-              'background-color': '#c9a227',
-              ':hover': {'background-color': '#b59223'},
-              ':focus': {'background-color': '#b59223'},
-              'border-radius': '26px'
-            }
-          }
-        }
+              ...commonOptions.product.styles.button,
+              'background-color': '#ff4d8d',
+              ':hover': { 'background-color': '#e94082' },
+              ':focus': { 'background-color': '#e94082' },
+            },
+          },
+        },
       };
 
-      const products = [
-        { id: '10224601497889', node: document.getElementById('buy-12') },
-        { id: '10224657858849', node: document.getElementById('buy-48') },
-        { id: '10224743612705', node: document.getElementById('buy-24') }
-      ];
-
-      products.forEach((p) => {
-        if (!p.node) return;
-        ui.createComponent('product', {
-          id: p.id,
-          node: p.node,
-          moneyFormat: '%24%7B%7Bamount%7D%7D',
-          options: baseOptions
-        });
+      ui.createComponent('product', {
+        id: productIds['buy-vday'],
+        node: vdayNode,
+        moneyFormat: '%24%7B%7Bamount%7D%7D',
+        options: vdayOptions,
       });
-    });
-  }
+    }
 
-  loadShopify(initShopify);
-})();
+    // Render buttons in the exact order of your product cards.
+    for (const mountId of ['buy-12', 'buy-24', 'buy-48']){
+      const mountNode = document.getElementById(mountId);
+      if (!mountNode) continue;
+      ui.createComponent('product', {
+        id: productIds[mountId],
+        node: mountNode,
+        moneyFormat: '%24%7B%7Bamount%7D%7D',
+        options: commonOptions,
+      });
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initYear();
+  initContinuousBackground(); // Add this line
+  initReveal();
+  initLightbox();
+  initHearts();
+  initTilt();
+
+  loadShopifyBuy(() => {
+    try { initShopify(); } catch (e) { console.warn('Shopify init failed:', e); }
+  });
+});
