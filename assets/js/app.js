@@ -1,4 +1,4 @@
-/* Baklawa Bites — Valentine Special */
+/* Baklawa Bites — Ramadan Night Sky */
 
 function initYear(){
   const el = document.getElementById('year');
@@ -58,56 +58,6 @@ function initLightbox(){
   });
 }
 
-function initHearts(){
-  const container = document.querySelector('.hearts');
-  if (!container) return;
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  const colors = ['#FF4D8D', '#FF86B6', '#D9B35E', '#F7B7D2'];
-  const total = 26; // initial burst
-  const burstMs = 1800;
-
-  const start = performance.now();
-
-  function spawn(){
-    const el = document.createElement('span');
-    el.className = 'heart';
-
-    const x = Math.random() * 100; // vw
-    const drift = (Math.random() * 18 - 9).toFixed(2) + 'vw';
-    const s = (Math.random() * 0.9 + 0.55).toFixed(2);
-    const rot = (Math.random() * 220 - 110).toFixed(0) + 'deg';
-    const dur = (Math.random() * 2.4 + 3.6).toFixed(2) + 's';
-    const delay = (Math.random() * 0.6).toFixed(2) + 's';
-
-    el.style.setProperty('--x', x.toFixed(2) + 'vw');
-    el.style.setProperty('--drift', drift);
-    el.style.setProperty('--s', s);
-    el.style.setProperty('--rot', rot);
-    el.style.setProperty('--dur', dur);
-    el.style.setProperty('--delay', delay);
-
-    el.style.left = '0';
-    el.style.color = colors[Math.floor(Math.random() * colors.length)];
-    el.style.fontSize = (Math.random() * 18 + 14).toFixed(0) + 'px';
-
-    el.addEventListener('animationend', () => el.remove());
-    container.appendChild(el);
-  }
-
-  // spread spawns over a short burst window
-  let spawned = 0;
-  function tick(now){
-    const t = now - start;
-    const target = Math.floor((t / burstMs) * total);
-    while (spawned < Math.min(target, total)){
-      spawn();
-      spawned++;
-    }
-    if (spawned < total) requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-}
 
 /* Gentle tilt/parallax on the hero card (adds depth without affecting layout) */
 function initTilt(){
@@ -150,6 +100,190 @@ function initContinuousBackground() {
   document.body.appendChild(overlay);
 }
 
+/* Falling stars on first load (short, subtle entrance animation) */
+function initStarRain(){
+  const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reducedMotion) return;
+
+  const rain = document.createElement('div');
+  rain.className = 'star-rain';
+  rain.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(rain);
+
+  const count = Math.max(16, Math.min(30, Math.floor(window.innerWidth / 55)));
+  for (let i = 0; i < count; i++){
+    const s = document.createElement('span');
+    s.className = 'falling-star';
+
+    const x = Math.random() * 100;
+    const delay = Math.random() * 0.85;
+    const dur = 1.55 + Math.random() * 1.15;
+    const drift = (Math.random() - 0.5) * 140;
+    const warm = Math.random() < 0.28;
+    const size = warm && Math.random() < 0.4 ? 3 : 2;
+    const opacity = (0.55 + Math.random() * 0.40).toFixed(2);
+
+    s.style.setProperty('--x', x.toFixed(2) + '%');
+    s.style.setProperty('--delay', delay.toFixed(2) + 's');
+    s.style.setProperty('--dur', dur.toFixed(2) + 's');
+    s.style.setProperty('--drift', drift.toFixed(0) + 'px');
+    s.style.setProperty('--s', size + 'px');
+    s.style.setProperty('--o', opacity);
+
+    if (warm){
+      s.style.background = 'rgba(217,179,94,.95)';
+      s.style.boxShadow = '0 0 10px rgba(217,179,94,.35), 0 0 22px rgba(255,255,255,.20)';
+    }
+
+    s.addEventListener('animationend', () => s.remove(), { once: true });
+    rain.appendChild(s);
+  }
+
+  // Fade and remove after a couple seconds so it doesn't distract.
+  window.setTimeout(() => {
+    rain.classList.add('fade');
+    window.setTimeout(() => rain.remove(), 700);
+  }, 2400);
+}
+
+
+/* Ramadan starfield (top-of-page twinkle) */
+function initStarfield(){
+  const canvas = document.getElementById('starfield');
+  if (!canvas) return;
+
+  const fallback = document.querySelector('.stars-fallback');
+  const ctx = canvas.getContext('2d', { alpha: true });
+  const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let w = 0, h = 0, dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+  const stars = [];
+
+  function resize(){
+    dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    w = Math.floor(window.innerWidth);
+    h = Math.floor(Math.min(window.innerHeight * 0.75, 720));
+    canvas.width = Math.floor(w * dpr);
+    canvas.height = Math.floor(h * dpr);
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    stars.length = 0;
+    const count = Math.floor((w * h) / 5200); // denser = more visible
+    for (let i = 0; i < count; i++){
+      const big = Math.random() < 0.10;
+      stars.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: big ? (Math.random() * 1.4 + 1.1) : (Math.random() * 0.9 + 0.25),
+        a: Math.random() * 0.58 + 0.26,
+        s: Math.random() * 0.9 + 0.35,
+        p: Math.random() * Math.PI * 2,
+        big,
+        warm: Math.random() < 0.30,
+      });
+    }
+  }
+
+  function draw(t){
+    ctx.clearRect(0, 0, w, h);
+    ctx.globalCompositeOperation = 'lighter';
+
+    for (const s of stars){
+      const tw = reducedMotion ? 0 : Math.sin(t * 0.0011 * s.s + s.p) * 0.22;
+      const alpha = Math.max(0, Math.min(1, s.a + tw));
+
+      // Core dot
+      ctx.beginPath();
+      ctx.fillStyle = s.warm
+        ? `rgba(217,179,94,${alpha})`
+        : `rgba(255,255,255,${alpha})`;
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Subtle glow halo (cheap)
+      if (s.big){
+        ctx.beginPath();
+        ctx.fillStyle = s.warm
+          ? `rgba(217,179,94,${alpha * 0.22})`
+          : `rgba(255,255,255,${alpha * 0.18})`;
+        ctx.arc(s.x, s.y, s.r * 3.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Sparkle cross
+        const len = s.r * 6.0;
+        ctx.strokeStyle = s.warm
+          ? `rgba(217,179,94,${alpha * 0.32})`
+          : `rgba(255,255,255,${alpha * 0.28})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(s.x - len, s.y);
+        ctx.lineTo(s.x + len, s.y);
+        ctx.moveTo(s.x, s.y - len);
+        ctx.lineTo(s.x, s.y + len);
+        ctx.stroke();
+      }
+    }
+
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
+  let rafId = 0;
+  function loop(t){
+    draw(t);
+    rafId = requestAnimationFrame(loop);
+  }
+
+  // Fade starfield slightly as you scroll down
+  function onScroll(){
+    const y = window.scrollY || 0;
+    const fade = Math.max(0.15, 1 - y / 600);
+    canvas.style.opacity = String(0.92 * fade);
+    if (fallback) fallback.style.opacity = String(0.20 * fade);
+  }
+
+  resize();
+  draw(0);
+  window.addEventListener('resize', () => {
+    cancelAnimationFrame(rafId);
+    resize();
+    draw(0);
+    if (!reducedMotion) rafId = requestAnimationFrame(loop);
+  }, { passive: true });
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  if (!reducedMotion) rafId = requestAnimationFrame(loop);
+}
+
+
+function initMoonScroll(){
+  const img = document.querySelector('.moon-img');
+  if (!img) return;
+
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    const y = window.scrollY || 0;
+    const deg = (y * 0.12) % 360;
+    img.style.transform = `rotate(${deg.toFixed(2)}deg) scaleX(-1)`;
+  };
+
+  const onScroll = () => {
+    if (!ticking){
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  update();
+}
+
+
+
 /* Shopify Buy Button (shared cart) */
 function loadShopifyBuy(cb){
   if (window.ShopifyBuy && window.ShopifyBuy.UI){
@@ -169,8 +303,8 @@ function initShopify(){
   const token = 'e6ed311285d5b71c3057ed317f544f2d';
 
   const productIds = {
-    // Valentine pre-order (hero button)
-    'buy-vday': 10230161146145,
+    // Small box order (hero button)
+    'buy-hero': 10224601497889,
     'buy-12': 10224601497889,
     'buy-24': 10224743612705,
     'buy-48': 10224657858849,
@@ -208,14 +342,14 @@ function initShopify(){
             'font-weight': '700',
             'padding': '12px 16px',
             'backdrop-filter': 'blur(14px)',
-            'color': 'rgba(42,30,18,0.92)',
+            'color': 'rgba(11,23,48,0.95)',
             ':hover': {
-              'background-color': 'rgba(255,77,141,0.18)',
-              'border': '1px solid rgba(255,77,141,0.28)',
+              'background-color': 'rgba(217,179,94,0.18)',
+              'border': '1px solid rgba(217,179,94,0.28)',
             },
             ':focus': {
               'outline': 'none',
-              'box-shadow': '0 0 0 4px rgba(255,77,141,0.20)',
+              'box-shadow': '0 0 0 4px rgba(217,179,94,0.20)',
             },
           },
         },
@@ -232,8 +366,8 @@ function initShopify(){
         },
         styles: {
           button: {
-            'background-color': 'rgba(255,77,141,0.18)',
-            'border': '1px solid rgba(255,77,141,0.28)',
+            'background-color': 'rgba(217,179,94,0.18)',
+            'border': '1px solid rgba(217,179,94,0.28)',
             'border-radius': '14px',
             'font-weight': '700',
           },
@@ -244,46 +378,46 @@ function initShopify(){
       toggle: {
         styles: {
           toggle: {
-            'background-color': 'rgba(255,77,141,0.18)',
-            'border': '1px solid rgba(255,77,141,0.28)',
+            'background-color': 'rgba(217,179,94,0.18)',
+            'border': '1px solid rgba(217,179,94,0.28)',
             'border-radius': '14px',
             'backdrop-filter': 'blur(14px)',
-            ':hover': { 'background-color': 'rgba(255,77,141,0.26)' },
+            ':hover': { 'background-color': 'rgba(217,179,94,0.26)' },
           },
         },
       },
     };
 
-    // Hero pre-order button (overlay on the hero image)
-    const vdayNode = document.getElementById('buy-vday');
-    if (vdayNode) {
-      const vdayOptions = {
+    // Hero order button (Small Box)
+    const heroNode = document.getElementById('buy-hero');
+    if (heroNode) {
+      const heroOptions = {
         ...commonOptions,
         product: {
           ...commonOptions.product,
-          text: { button: 'Pre-Order' },
+          text: { button: 'Order Small' },
           styles: {
             ...commonOptions.product.styles,
             product: { 'text-align': 'center', 'margin': '0', 'max-width': '100%' },
             button: {
               ...commonOptions.product.styles.button,
-              'background-color': '#ff4d8d',
-              ':hover': { 'background-color': '#e94082' },
-              ':focus': { 'background-color': '#e94082' },
+              'background-color': 'rgba(217,179,94,0.38)',
+              'border': '1px solid rgba(217,179,94,0.62)',
+              ':hover': { 'background-color': 'rgba(217,179,94,0.52)' },
+              ':focus': { 'background-color': 'rgba(217,179,94,0.52)' },
             },
           },
         },
       };
 
       ui.createComponent('product', {
-        id: productIds['buy-vday'],
-        node: vdayNode,
+        id: productIds['buy-hero'],
+        node: heroNode,
         moneyFormat: '%24%7B%7Bamount%7D%7D',
-        options: vdayOptions,
+        options: heroOptions,
       });
     }
-
-    // Render buttons in the exact order of your product cards.
+// Render buttons in the exact order of your product cards.
     for (const mountId of ['buy-12', 'buy-24', 'buy-48']){
       const mountNode = document.getElementById(mountId);
       if (!mountNode) continue;
@@ -302,8 +436,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initContinuousBackground(); // Add this line
   initReveal();
   initLightbox();
-  initHearts();
-  initTilt();
+  initStarRain();
+  initStarfield();
+  initMoonScroll();
+initTilt();
 
   loadShopifyBuy(() => {
     try { initShopify(); } catch (e) { console.warn('Shopify init failed:', e); }
